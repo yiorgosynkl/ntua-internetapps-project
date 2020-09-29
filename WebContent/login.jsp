@@ -6,17 +6,82 @@
 	String connectionURL = "jdbc:mysql://localhost:3306/mydatabase";
 	Connection connection = null;
 	Statement statement = null;	
+	String pageState = "BEGIN";
 %>
 
-
 <html>
-<body>
+<head>
+	<title>E-shop page</title>
+	<link rel=stylesheet type="text/css" href="style.css">
+</head>
+
+<body bottommargin="0" leftmargin="0" marginheight="0" marginwidth="0" rightmargin="0" topmargin="0" background="images/background.jpg">
+
 	<%
-		if (request.getParameter("username") == null || request.getParameter("password") == null 
-				) {
+		if (request.getParameter("username") != null && request.getParameter("password") != null){ 
+			
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			connection = DriverManager.getConnection(connectionURL, "root",
+					"");
+			statement = connection.createStatement();
+			String searchSql = "SELECT password FROM mytable WHERE username='" + username  + "';";
+			ResultSet result = statement.executeQuery(searchSql);
+			String dbPassword = (result.next()) ? result.getString("password") : null;
+
+			if (dbPassword == null){
+				pageState = "INCORRECT_USER";
+			} else if (password.equals(dbPassword)){
+				pageState = "CORRECT";
+				// action
+			} else {
+				pageState = "INCORRECT_PASSWORD";
+			}
+		}	
+
 	%>
 
-	<br /> Please Login!
+
+<table width="780" height="143" cellpadding="0" cellspacing="0" border="0">
+	<tr valign="top">
+		<td width="780">
+<!----- Insert your logo below, or change templogotop.jpg to blanklogo.jpg if you do not know how to work with a graphics editor ------------------------------------------>
+<img src="images/templogo.jpg" width="780" height="143" border="0" alt="LOGO">
+<!---------------------------------------------------------------------->
+		</td>
+	</tr>
+</table>
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+	<tr valign="top">
+		<td width="175">
+<table width="175" cellpadding="4" cellspacing="0" border="0"><tr valign="top"><td width="175">
+<!------------------------ Menu section, links go below ---------------------------->
+<BR>
+<a href="">login</a><BR>
+<a href="">register</a><BR>
+<!--------------------------------------------------------------------------------->
+
+</td></tr></table>
+		</td>
+		
+		<td width="510">
+			<table width="510" cellpadding="5" cellspacing="5" border="0">
+				<tr valign="top">
+					<td width="510" style="text-align:right">
+				<% if (pageState.equals("CORRECT")){ %>
+						<p>Welcome, username</p>
+				<% } %>
+
+					</td>
+				</tr>
+				<tr valign="top">
+					<td width="510">
+<!------------------------ Content zone, add your content below ---------------------------->
+<center><h3>Login</h3></center>
+
 	<form method="get" action="login.jsp">
 		<table>
 			<tr>
@@ -32,39 +97,26 @@
 			</tr>
 		</table>
 	</form>
+	
+	<% if (pageState.equals("INCORRECT_USER")){ %>
+		<p>The user doesn't exitst </p>
+	<% } 
+	if (pageState.equals("INCORRECT_PASSWORD")){ %>
+		<p>The password was incorrect </p>
+	<% } 
+	if (pageState.equals("CORRECT")){ %>
+		<p>The password was correct </p>
+	<% } %>
 
-	<%
-			}else {
-			
-				String username = request.getParameter("username");
-				String password = request.getParameter("password");
-				
-				Class.forName("com.mysql.jdbc.Driver").newInstance();
-				connection = DriverManager.getConnection(connectionURL, "root",
-						"");
-				statement = connection.createStatement();
-				String searchSql = "SELECT password FROM mytable WHERE username=\"" + username  + "\" ;";
-				ResultSet result = statement.executeQuery(searchSql);
-				String dbPassword = (result.next()) ? result.getString("password") : null;
+<BR><BR>
+<!------------------------------------------------------------------------------------------>
 
-				if (dbPassword.equals(null)){
-	%>
-			<h1> User <%=username%> does not exist </h1>
-	<%					
-				} else if (password.equals(dbPassword)){
-					System.out.println( (password.equals(dbPassword)) ? "correct" : "incorrect" );
-	%>
-			<h1> Thank you for logging in, <%=username%> </h1>
-	<%
-				} else {
-					
-	%>
-			<h1> This is not the correct password for <%=username%> </h1>
-	<%
-				}
-			}
-	%>
-
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
 
 </body>
 </html>
