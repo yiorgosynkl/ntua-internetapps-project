@@ -69,15 +69,12 @@
 			<table width="510" cellpadding="5" cellspacing="5" border="0">
 				<tr valign="top">
 					<td width="510" style="text-align:right">
-<%-- 				<% if (false){ %>
-						<p>Welcome, username</p>
-				<% } %> --%>
 					</td>
 				</tr>
 				<tr valign="top">
 					<td width="510">
 <!------------------------ Content zone, add your content below ---------------------------->
-<center><h3>Login</h3></center>
+<center><h3>Register</h3></center>
 
 	<form method="get" action="register.jsp">
 		<table>

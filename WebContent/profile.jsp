@@ -6,7 +6,6 @@
 	String connectionURL = "jdbc:mysql://localhost:3306/mydatabase";
 	Connection connection = null;
 	Statement statement = null;	
-	String pageState = "LOGIN_START";
 %>
 
 <html>
@@ -18,7 +17,7 @@
 <body bottommargin="0" leftmargin="0" marginheight="0" marginwidth="0" rightmargin="0" topmargin="0" background="images/background.jpg">
 
 	<%
-		if (request.getParameter("username") != null && request.getParameter("password") != null){ 
+/* 		if (request.getParameter("username") != null && request.getParameter("password") != null){ 
 			
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
@@ -39,7 +38,7 @@
 			} else {
 				pageState = "LOGIN_FAIL_PASSWORD";
 			}
-		}	
+		}	 */
 
 	%>
 
@@ -60,8 +59,11 @@
 <table width="175" cellpadding="4" cellspacing="0" border="0"><tr valign="top"><td width="175">
 <!------------------------ Menu section, links go below ---------------------------->
 <BR>
-<a href="./login.jsp">login</a><BR>
-<a href="./register.jsp">register</a><BR>
+<a href="./products.jsp">products</a><BR>
+<a href="./basket.jsp">basket</a><BR>
+<a href="./profile.jsp">profile</a><BR>
+<a href="./login.jsp">logout</a><BR>
+
 <!--------------------------------------------------------------------------------->
 
 </td></tr></table>
@@ -71,12 +73,13 @@
 			<table width="510" cellpadding="5" cellspacing="5" border="0">
 				<tr valign="top">
 					<td width="510" style="text-align:right">
+						<p>Welcome, username </p>
 					</td>
 				</tr>
 				<tr valign="top">
 					<td width="510">
 <!------------------------ Content zone, add your content below ---------------------------->
-<center><h3>Login</h3></center>
+<center><h3>Profile</h3></center>
 
 	<form method="get" action="login.jsp">
 		<table>
@@ -93,16 +96,7 @@
 			</tr>
 		</table>
 	</form>
-	
-	<% if (pageState.equals("LOGIN_FAIL_USER")){ %>
-		<p>The user doesn't exist </p>
-	<% } 
-	if (pageState.equals("LOGIN_FAIL_PASSWORD")){ %>
-		<p>The password was incorrect </p>
-	<% } 
-	if (pageState.equals("LOGIN_SUCCESS")){ %>
-		<p>The password was correct. Continue to the <a href="products.jsp">products</a> page </p>
-	<% } %>
+
 
 <BR><BR>
 <!------------------------------------------------------------------------------------------>
