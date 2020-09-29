@@ -6,7 +6,7 @@
 	String connectionURL = "jdbc:mysql://localhost:3306/mydatabase";
 	Connection connection = null;
 	Statement statement = null;	
-	String pageState = "LOGIN_START";
+	String pageState = "REGISTRATION_START";
 %>
 
 <html>
@@ -29,18 +29,16 @@
 			statement = connection.createStatement();
 			String searchSql = "SELECT password FROM mytable WHERE username='" + username  + "';";
 			ResultSet result = statement.executeQuery(searchSql);
-			String dbPassword = (result.next()) ? result.getString("password") : null;
-
-			if (dbPassword == null){
-				pageState = "LOGIN_FAIL_USER";
-			} else if (password.equals(dbPassword)){
-				pageState = "LOGIN_SUCCESS";
-				// action
-			} else {
-				pageState = "LOGIN_FAIL_PASSWORD";
+			if (!result.next()){
+				pageState = "VALID_USER";
+				String insertSql = "INSERT INTO mytable (username, password) VALUES( '" + username  + "' ,'" + password + "') ;";
+				int result2 = statement.executeUpdate(insertSql);
+				pageState = (result2 == 1) ? "REGISTRATION_SUCCESS" : "REGISTRATION_FAIL_PROBLEM"; 
 			}
-		}	
-
+			else {
+				pageState = "REGISTRATION_FAIL_USER_EXISTS";
+			} 
+		}
 	%>
 
 
@@ -71,10 +69,9 @@
 			<table width="510" cellpadding="5" cellspacing="5" border="0">
 				<tr valign="top">
 					<td width="510" style="text-align:right">
-<%-- 				<% if (pageState.equals("CORRECT")){ %>
+<%-- 				<% if (false){ %>
 						<p>Welcome, username</p>
-				<% } %>
- --%>
+				<% } %> --%>
 					</td>
 				</tr>
 				<tr valign="top">
@@ -82,7 +79,7 @@
 <!------------------------ Content zone, add your content below ---------------------------->
 <center><h3>Login</h3></center>
 
-	<form method="get" action="login.jsp">
+	<form method="get" action="register.jsp">
 		<table>
 			<tr>
 				<td>Name:</td>
@@ -98,14 +95,14 @@
 		</table>
 	</form>
 	
-	<% if (pageState.equals("LOGIN_FAIL_USER")){ %>
-		<p>The user doesn't exist </p>
+	<% if (pageState.equals("REGISTRATION_SUCCESS")){ %>
+		<p>The registration was successful </p>
 	<% } 
-	if (pageState.equals("LOGIN_FAIL_PASSWORD")){ %>
-		<p>The password was incorrect </p>
+	if (pageState.equals("REGISTRATION_FAIL_USER_EXISTS")){ %>
+		<p>The registration failed because user already exists </p>
 	<% } 
-	if (pageState.equals("LOGIN_SUCCESS")){ %>
-		<p>The password was correct </p>
+	if (pageState.equals("REGISTRATION_FAIL_PROBLEM")){ %>
+		<p>The registration failed </p>
 	<% } %>
 
 <BR><BR>
