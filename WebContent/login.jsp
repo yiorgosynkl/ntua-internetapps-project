@@ -35,7 +35,7 @@
 				pageState = "LOGIN_FAIL_USER";
 			} else if (password.equals(dbPassword)){
 				pageState = "LOGIN_SUCCESS";
-				// action
+				session.setAttribute( "SessionUsername", username );
 			} else {
 				pageState = "LOGIN_FAIL_PASSWORD";
 			}
@@ -101,7 +101,7 @@
 		<p>The password was incorrect </p>
 	<% } 
 	if (pageState.equals("LOGIN_SUCCESS")){ %>
-		<p>The password was correct. Continue to the <a href="products.jsp">products</a> page </p>
+		<p>The password was correct, <%=session.getAttribute("SessionUsername")%>. Continue to the <a href="products.jsp">products</a> page </p>
 	<% } %>
 
 <BR><BR>

@@ -7,6 +7,7 @@
 	Connection connection = null;
 	Statement statement = null;	
 	String pageState = "PROFILE_UPDATE_START";
+	String username = session.getAttribute("SessionUsername").toString();
 %>
 
 <html>
@@ -18,31 +19,31 @@
 <body bottommargin="0" leftmargin="0" marginheight="0" marginwidth="0" rightmargin="0" topmargin="0" background="images/background.jpg">
 
 	<%
-/* 		if (request.getParameter("username") != null && request.getParameter("password") != null){ 
+		if (request.getParameter("name") != null && request.getParameter("date") != null){ 
 			
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
+			String name = request.getParameter("name");
+			String date = request.getParameter("date");
 			
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			connection = DriverManager.getConnection(connectionURL, "root",
 					"");
 			statement = connection.createStatement();
-			String searchSql = "SELECT password FROM users WHERE username='" + username  + "';";
+			String searchSql = "SELECT * FROM users WHERE username='" + username  + "';";
 			ResultSet result = statement.executeQuery(searchSql);
-			String dbPassword = (result.next()) ? result.getString("password") : null;
-
-			if (dbPassword == null){
-				pageState = "LOGIN_FAIL_USER";
-			} else if (password.equals(dbPassword)){
-				pageState = "LOGIN_SUCCESS";
-				// action
-			} else {
-				pageState = "LOGIN_FAIL_PASSWORD";
+			if (result.next()){
+				String updateSql = "UPDATE users SET name='" + name + "', date='" + date + "' WHERE username='" + username + "'";
+				int result2 = statement.executeUpdate(updateSql);
+				System.out.println(result2);
+				pageState = (result2 == 1) ? "PROFILE_UPDATE_SUCCESS" : "PROFILE_UPDATE_FAIL"; 
 			}
-		}	 */
+			else {
+				pageState = "PROFILE_UPDATE_FAIL";
+			} 
+		}
+		System.out.println(pageState);
+
 
 	%>
-
 
 <table width="780" height="143" cellpadding="0" cellspacing="0" border="0">
 	<tr valign="top">
@@ -74,7 +75,7 @@
 			<table width="510" cellpadding="5" cellspacing="5" border="0">
 				<tr valign="top">
 					<td width="510" style="text-align:right">
-						<p>Welcome, username </p>
+						<p>Welcome, <%=session.getAttribute("SessionUsername")%> </p>
 					</td>
 				</tr>
 				<tr valign="top">
@@ -82,15 +83,15 @@
 <!------------------------ Content zone, add your content below ---------------------------->
 <center><h3>Profile</h3></center>
 
-	<form method="post" action="./profile.jsp">
+	<form method="get" action="./profile.jsp">
 		<table>
 			<tr>
 				<td>First and Last Name:</td>
-				<td><input type="text" name="name" size=40 /></td>
+				<td><input type="text" name="name" value="" size=40 /></td>
 			</tr>
 			<tr>
 				<td>Birth Date:</td>
-			 	<td><input type="date" id="start" name="date" value="2000-06-21" min="1900-01-01" max="2019-12-31"></td>
+			 	<td><input type="date" id="start" name="date" value="2010-06-21" min="1900-01-01" max="2019-12-31"></td>
 			</tr>
 			<tr>
 				<td colspan=2><input type=submit /></td>

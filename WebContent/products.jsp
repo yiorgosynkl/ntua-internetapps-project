@@ -73,7 +73,7 @@
 			<table width="510" cellpadding="5" cellspacing="5" border="0">
 				<tr valign="top">
 					<td width="510" style="text-align:right">
-						<p>Welcome, username </p>
+						<p>Welcome, <%=session.getAttribute("SessionUsername").toString()%> </p>
 					</td>
 				</tr>
 				<tr valign="top">

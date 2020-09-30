@@ -29,12 +29,10 @@
 			connection = DriverManager.getConnection(connectionURL, "root",
 					"");
 			statement = connection.createStatement();
-			String searchSql = "SELECT password FROM users WHERE username='" + username  + "';";
+			String searchSql = "SELECT * FROM users WHERE username='" + username  + "';";
 			ResultSet result = statement.executeQuery(searchSql);
-			System.out.println(result.next());
 			if (!result.next()){
-				pageState = "VALID_USER";
-				String insertSql = "INSERT INTO users (username, name, date, password) VALUES ('" + username + "', '" + name + "', '" + date + "', '" + password + "');";
+				String insertSql = "INSERT INTO users (username, name, datepassword) VALUES ('" + username + "',,  '" + name + "', '" + date + "', '" + password + "');";
 				int result2 = statement.executeUpdate(insertSql);
 				pageState = (result2 == 1) ? "REGISTRATION_SUCCESS" : "REGISTRATION_FAIL_PROBLEM"; 
 			}
