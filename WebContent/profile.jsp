@@ -6,6 +6,7 @@
 	String connectionURL = "jdbc:mysql://localhost:3306/ntua_internetapps_2020";
 	Connection connection = null;
 	Statement statement = null;	
+	String pageState = "PROFILE_UPDATE_START";
 %>
 
 <html>
@@ -81,21 +82,27 @@
 <!------------------------ Content zone, add your content below ---------------------------->
 <center><h3>Profile</h3></center>
 
-	<form method="get" action="login.jsp">
+	<form method="get" action="./profile.jsp">
 		<table>
 			<tr>
-				<td>Name:</td>
-				<td><input type="text" name="username" size=40 /></td>
+				<td>First and Last Name:</td>
+				<td><input type="text" name="name" size=40 /></td>
 			</tr>
 			<tr>
-				<td>Password:</td>
-				<td><input type="password" name="password" size=40 /></td>
+				<td>Birth Date:</td>
+			 	<td><input type="date" id="start" name="date" value="2000-06-21" min="1900-01-01" max="2019-12-31"></td>
 			</tr>
 			<tr>
 				<td colspan=2><input type=submit /></td>
 			</tr>
 		</table>
 	</form>
+	<% if (pageState.equals("PROFILE_UPDATE_SUCCESS")){ %>
+		<p>The update was successful </p>
+	<% } 
+	if (pageState.equals("PROFILE_UPDATE_FAIL")){ %>
+		<p>The update failed </p>
+	<% } %>
 
 
 <BR><BR>
