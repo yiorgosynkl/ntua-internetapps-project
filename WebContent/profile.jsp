@@ -82,7 +82,7 @@
 <!------------------------ Content zone, add your content below ---------------------------->
 <center><h3>Profile</h3></center>
 
-	<form method="get" action="./profile.jsp">
+	<form method="post" action="./profile.jsp">
 		<table>
 			<tr>
 				<td>First and Last Name:</td>

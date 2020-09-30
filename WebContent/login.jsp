@@ -78,7 +78,7 @@
 <!------------------------ Content zone, add your content below ---------------------------->
 <center><h3>Login</h3></center>
 
-	<form method="get" action="login.jsp">
+	<form method="post" action="login.jsp">
 		<table>
 			<tr>
 				<td>Username:</td>

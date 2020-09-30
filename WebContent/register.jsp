@@ -79,7 +79,7 @@
 <!------------------------ Content zone, add your content below ---------------------------->
 <center><h3>Register</h3></center>
 
-	<form method="get" action="register.jsp">
+	<form method="post" action="register.jsp">
 		<table>
 			<tr>
 				<td>Username:</td>
