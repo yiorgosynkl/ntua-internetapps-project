@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page import="java.sql.*"%>
 <%
-	String connectionURL = "jdbc:mysql://localhost:3306/mydatabase";
+	String connectionURL = "jdbc:mysql://localhost:3306/ntua_internetapps_2020";
 	Connection connection = null;
 	Statement statement = null;	
 %>
@@ -26,7 +26,7 @@
 			connection = DriverManager.getConnection(connectionURL, "root",
 					"");
 			statement = connection.createStatement();
-			String searchSql = "SELECT password FROM mytable WHERE username='" + username  + "';";
+			String searchSql = "SELECT password FROM users WHERE username='" + username  + "';";
 			ResultSet result = statement.executeQuery(searchSql);
 			String dbPassword = (result.next()) ? result.getString("password") : null;
 

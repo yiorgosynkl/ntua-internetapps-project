@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page import="java.sql.*"%>
 <%
-	String connectionURL = "jdbc:mysql://localhost:3306/mydatabase";
+	String connectionURL = "jdbc:mysql://localhost:3306/ntua_internetapps_2020";
 	Connection connection = null;
 	Statement statement = null;	
 	String pageState = "REGISTRATION_START";
@@ -29,11 +29,12 @@
 			connection = DriverManager.getConnection(connectionURL, "root",
 					"");
 			statement = connection.createStatement();
-			String searchSql = "SELECT password FROM mytable WHERE username='" + username  + "';";
+			String searchSql = "SELECT password FROM users WHERE username='" + username  + "';";
 			ResultSet result = statement.executeQuery(searchSql);
+			System.out.println(result.next());
 			if (!result.next()){
 				pageState = "VALID_USER";
-				String insertSql = "INSERT INTO mytable (username, name, date, password) VALUES ('" + username + "', '" + name + "', '" + date + "', '" + password + "');";
+				String insertSql = "INSERT INTO users (username, name, date, password) VALUES ('" + username + "', '" + name + "', '" + date + "', '" + password + "');";
 				int result2 = statement.executeUpdate(insertSql);
 				pageState = (result2 == 1) ? "REGISTRATION_SUCCESS" : "REGISTRATION_FAIL_PROBLEM"; 
 			}
