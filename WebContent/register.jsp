@@ -21,6 +21,8 @@
 		if (request.getParameter("username") != null && request.getParameter("password") != null){ 
 			
 			String username = request.getParameter("username");
+			String name = request.getParameter("name");
+			String date = request.getParameter("date");
 			String password = request.getParameter("password");
 			
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -31,7 +33,7 @@
 			ResultSet result = statement.executeQuery(searchSql);
 			if (!result.next()){
 				pageState = "VALID_USER";
-				String insertSql = "INSERT INTO mytable (username, password) VALUES( '" + username  + "' ,'" + password + "') ;";
+				String insertSql = "INSERT INTO mytable (username, name, date, password) VALUES ('" + username + "', '" + name + "', '" + date + "', '" + password + "');";
 				int result2 = statement.executeUpdate(insertSql);
 				pageState = (result2 == 1) ? "REGISTRATION_SUCCESS" : "REGISTRATION_FAIL_PROBLEM"; 
 			}
@@ -79,8 +81,16 @@
 	<form method="get" action="register.jsp">
 		<table>
 			<tr>
-				<td>Name:</td>
+				<td>Username:</td>
 				<td><input type="text" name="username" size=40 /></td>
+			</tr>
+			<tr>
+				<td>First and Last Name:</td>
+				<td><input type="text" name="name" size=40 /></td>
+			</tr>
+			<tr>
+				<td>Birth Date:</td>
+			 	<td><input type="date" id="start" name="date" value="2000-06-21" min="1900-01-01" max="2019-12-31"></td>
 			</tr>
 			<tr>
 				<td>Password:</td>

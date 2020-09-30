@@ -81,7 +81,7 @@
 	<form method="get" action="login.jsp">
 		<table>
 			<tr>
-				<td>Name:</td>
+				<td>Username:</td>
 				<td><input type="text" name="username" size=40 /></td>
 			</tr>
 			<tr>
