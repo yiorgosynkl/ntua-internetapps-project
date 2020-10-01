@@ -3,6 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page import="java.sql.*"%>
 <%@ page import="com.ynkl.*"%>
+<%@ page import="java.util.*"%>
 <%
 	String connectionURL = "jdbc:mysql://localhost:3306/ntua_internetapps_2020";
 	Connection connection = null;
@@ -60,32 +61,36 @@
 				statement = connection.createStatement();
 				String searchSql = "SELECT * FROM products;";
 				ResultSet result = statement.executeQuery(searchSql);
-				String idPar = "22";
-				String namePar = "Macbook 2";
-				Integer pricePar = 30;
-				Product pr1 = new Product("22", namePar, pricePar);
+				Catalog productCatalog = new Catalog();
+				
+				while  (result.next()){
+					String productName = result.getString("name");
+					String productId = String.valueOf(result.getInt("id"));
+					int productPrice = result.getInt("price");
+					Product newProduct = new Product(productId, productName, productPrice);
+					productCatalog.addProduct(newProduct);
+				}
+				
+				session.setAttribute("SessionProductCatalog", productCatalog);
 			%>
 
 <center><h3>Products</h3></center>
-
-			<p><%=pr1.getName()%></p>
 			<table width="510" cellpadding="2" cellspacing="1" border="1">
 				<% 
-					while (result.next()){
-						String productName = result.getString("name");
-						int productPrice = result.getInt("price");
-						int productId = result.getInt("id");
+					ArrayList<Product> productsArray = productCatalog.getProducts();
+					for (int i=0; i < productsArray.size(); i++){
+						
 				%>
 					<tr valign="top" align="center">
 						<td width="310">
-							<p><%=productName%> </p>
+							<p><%=productsArray.get(i).getName()%> </p>
 						</td>
 						<td width="100">
-							<p><%=productPrice%> $</p>
+							<p><%=productsArray.get(i).getPrice()%> $</p>
 						</td>
 						<td width="100">				
 							<form action="./products.jsp" method="get">
-								<input type="hidden" name="productId" value=<%=productId%> />
+								<input type="hidden" name="productId" value=<%=productsArray.get(i).getId()%> />
 								<button type="submit" style="padding: 14px 28px;">Add</button>
 							</form>
 						</td>
@@ -98,12 +103,31 @@
 			
 		<%
 			String rqProductId = request.getParameter("productId");
-			
 			if (rqProductId != null){
-				session.setAttribute( "SessionProductId", rqProductId );
-		%>
+				Catalog basketCatalog = (Catalog) session.getAttribute("SessionBasketCatalog");
+				if (basketCatalog == null){
+					basketCatalog = new Catalog();
+					session.setAttribute("SessionBasketCatalog", basketCatalog);
+				}
+				searchSql = "SELECT * FROM products WHERE id=" + rqProductId + ";";
+				result = statement.executeQuery(searchSql);
+				if (result.next()){
+					String productName = result.getString("name");
+					String productId = String.valueOf(result.getInt("id"));
+					int productPrice = result.getInt("price");
+					Product newProduct = new Product(productId, productName, productPrice);
+					basketCatalog.addProduct(newProduct);
+					session.setAttribute("SessionBasketCatalog", basketCatalog);
+		%> 
 				<p>The product was added to the basket</p>
+		<%
+				}
+				else {
+
+		%>
+				<p>The product could not be added to the basket</p>
 		<% 
+				}			
 			}
 		%>
 

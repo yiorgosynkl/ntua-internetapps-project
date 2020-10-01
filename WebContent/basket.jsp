@@ -2,6 +2,8 @@
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page import="java.sql.*"%>
+<%@ page import="com.ynkl.*"%>
+<%@ page import="java.util.*"%>
 <%
 	String connectionURL = "jdbc:mysql://localhost:3306/ntua_internetapps_2020";
 	Connection connection = null;
@@ -15,33 +17,6 @@
 </head>
 
 <body bottommargin="0" leftmargin="0" marginheight="0" marginwidth="0" rightmargin="0" topmargin="0" background="images/background.jpg">
-
-	<%
-/* 		if (request.getParameter("username") != null && request.getParameter("password") != null){ 
-			
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			connection = DriverManager.getConnection(connectionURL, "root",
-					"");
-			statement = connection.createStatement();
-			String searchSql = "SELECT password FROM users WHERE username='" + username  + "';";
-			ResultSet result = statement.executeQuery(searchSql);
-			String dbPassword = (result.next()) ? result.getString("password") : null;
-
-			if (dbPassword == null){
-				pageState = "LOGIN_FAIL_USER";
-			} else if (password.equals(dbPassword)){
-				pageState = "LOGIN_SUCCESS";
-				// action
-			} else {
-				pageState = "LOGIN_FAIL_PASSWORD";
-			}
-		}	 */
-
-	%>
-
 
 <table width="780" height="143" cellpadding="0" cellspacing="0" border="0">
 	<tr valign="top">
@@ -79,24 +54,39 @@
 				<tr valign="top">
 					<td width="510">
 <!------------------------ Content zone, add your content below ---------------------------->
+			<%
+				Catalog basketCatalog = (Catalog) session.getAttribute("SessionBasketCatalog");			
+				if (basketCatalog == null){
+					basketCatalog = new Catalog();
+					session.setAttribute("SessionBasketCatalog", basketCatalog);				}
+			%>
+
 <center><h3>Basket</h3></center>
 
-	<form method="get" action="login.jsp">
-		<table>
-			<tr>
-				<td>Name:</td>
-				<td><input type="text" name="username" size=40 /></td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><input type="password" name="password" size=40 /></td>
-			</tr>
-			<tr>
-				<td colspan=2><input type=submit /></td>
-			</tr>
-		</table>
-	</form>
-
+			<table width="510" cellpadding="2" cellspacing="1" border="1">
+				<% 
+					ArrayList<Product> productsArray = basketCatalog.getProducts();
+					for (int i=0; i < productsArray.size(); i++){
+						
+				%>
+					<tr valign="top" align="center">
+						<td width="310">
+							<p><%=productsArray.get(i).getName()%> </p>
+						</td>
+						<td width="100">
+							<p><%=productsArray.get(i).getPrice()%> $</p>
+						</td>
+						<td width="100">				
+							<form action="./products.jsp" method="get">
+								<input type="hidden" name="productId" value=<%=productsArray.get(i).getId()%> />
+								<button type="submit" style="padding: 14px 28px;">Add</button>
+							</form>
+						</td>
+					</tr>	
+				<%	
+					}
+				%>
+			</table>
 
 <BR><BR>
 <!------------------------------------------------------------------------------------------>
