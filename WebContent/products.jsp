@@ -63,55 +63,43 @@
 
 <center><h3>Products</h3></center>
 
-
-<!-- 		<table width="510" cellpadding="2" cellspacing="1" border="1">
-				<tr valign="top">
-					<td width="510">
-						<p>MacBook </p>
-					</td>
-					<td width="100">
-						<p>Price</p>
-					</td>
-					<td width="100">
-						<p>Button</p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<td width="510">
-						<p>BAD </p>
-					</td>
-					<td width="100">
-						<p>Price</p>
-					</td>
-					<td width="100">
-						<p>Button</p>
-					</td>
-				</tr>
-		</table>
- -->
-
-
-		<table width="510" cellpadding="2" cellspacing="1" border="1">
+			<table width="510" cellpadding="2" cellspacing="1" border="1">
 				<% 
 					while (result.next()){
-						
+						String productName = result.getString("name");
+						int productPrice = result.getInt("price");
+						int productId = result.getInt("id");
 				%>
 					<tr valign="top" align="center">
 						<td width="310">
-							<p><%=result.getString("name") %> </p>
+							<p><%=productName%> </p>
 						</td>
 						<td width="100">
-							<p><%=result.getString("price")%> $</p>
+							<p><%=productPrice%> $</p>
 						</td>
-						<td width="100">
-							<button type="button" style="padding: 14px 28px;">Add</button>
+						<td width="100">				
+							<form action="./products.jsp" method="get">
+								<input type="hidden" name="productId" value=<%=productId%> />
+								<button type="submit" style="padding: 14px 28px;">Add</button>
+							</form>
 						</td>
-					</tr>
+					</tr>	
 				<%	
 					}
 				%>
-		</table>
-
+			</table>
+			
+			
+		<%
+			String rqProductId = request.getParameter("productId");
+			
+			if (rqProductId != null){
+				session.setAttribute( "SessionProductId", rqProductId );
+		%>
+			<p>The product was added to the basket</p>
+		<% 
+			}
+		%>
 
 <BR><BR>
 <!------------------------------------------------------------------------------------------>
