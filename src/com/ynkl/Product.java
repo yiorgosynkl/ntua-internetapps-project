@@ -1,4 +1,4 @@
-import java.util.*;
+package com.ynkl;
 
 public class Product {
 	private String id;
@@ -29,9 +29,10 @@ public class Product {
 		this.name = name;
 	}
 
-	public Product(String id, Integer price, String name){
+	public Product(String id, String name, Integer price){
 		setId(id);
 		setPrice(price);
 		setName(name);
 	}
 }
+

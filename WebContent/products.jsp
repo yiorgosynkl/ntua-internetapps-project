@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page import="java.sql.*"%>
+<%@ page import="com.ynkl.*"%>
 <%
 	String connectionURL = "jdbc:mysql://localhost:3306/ntua_internetapps_2020";
 	Connection connection = null;
@@ -59,10 +60,15 @@
 				statement = connection.createStatement();
 				String searchSql = "SELECT * FROM products;";
 				ResultSet result = statement.executeQuery(searchSql);
+				String idPar = "22";
+				String namePar = "Macbook 2";
+				Integer pricePar = 30;
+				Product pr1 = new Product("22", namePar, pricePar);
 			%>
 
 <center><h3>Products</h3></center>
 
+			<p><%=pr1.getName()%></p>
 			<table width="510" cellpadding="2" cellspacing="1" border="1">
 				<% 
 					while (result.next()){
@@ -96,7 +102,7 @@
 			if (rqProductId != null){
 				session.setAttribute( "SessionProductId", rqProductId );
 		%>
-			<p>The product was added to the basket</p>
+				<p>The product was added to the basket</p>
 		<% 
 			}
 		%>

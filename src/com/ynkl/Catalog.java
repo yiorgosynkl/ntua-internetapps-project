@@ -1,10 +1,14 @@
-import java.util.*;
+package com.ynkl;
 
-public class Basket{
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Catalog{
 	private ArrayList<Product> products;
 	private Set<String> ids;
 	
-	public Basket() {
+	public Catalog() {
 		products = new ArrayList<Product>();
 		ids = new HashSet<String>();
 	}
@@ -23,5 +27,5 @@ public class Basket{
 			ids.add(pr.getId());
 		}
 	}
-	
 }
+	
