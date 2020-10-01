@@ -16,32 +16,6 @@
 
 <body bottommargin="0" leftmargin="0" marginheight="0" marginwidth="0" rightmargin="0" topmargin="0" background="images/background.jpg">
 
-	<%
-/* 		if (request.getParameter("username") != null && request.getParameter("password") != null){ 
-			
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			connection = DriverManager.getConnection(connectionURL, "root",
-					"");
-			statement = connection.createStatement();
-			String searchSql = "SELECT password FROM users WHERE username='" + username  + "';";
-			ResultSet result = statement.executeQuery(searchSql);
-			String dbPassword = (result.next()) ? result.getString("password") : null;
-
-			if (dbPassword == null){
-				pageState = "LOGIN_FAIL_USER";
-			} else if (password.equals(dbPassword)){
-				pageState = "LOGIN_SUCCESS";
-				// action
-			} else {
-				pageState = "LOGIN_FAIL_PASSWORD";
-			}
-		}	 */
-
-	%>
-
 
 <table width="780" height="143" cellpadding="0" cellspacing="0" border="0">
 	<tr valign="top">
@@ -79,23 +53,64 @@
 				<tr valign="top">
 					<td width="510">
 <!------------------------ Content zone, add your content below ---------------------------->
+			<%
+				Class.forName("com.mysql.jdbc.Driver").newInstance();
+				connection = DriverManager.getConnection(connectionURL, "root", "");
+				statement = connection.createStatement();
+				String searchSql = "SELECT * FROM products;";
+				ResultSet result = statement.executeQuery(searchSql);
+			%>
+
 <center><h3>Products</h3></center>
 
-	<form method="get" action="login.jsp">
-		<table>
-			<tr>
-				<td>Name:</td>
-				<td><input type="text" name="username" size=40 /></td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><input type="password" name="password" size=40 /></td>
-			</tr>
-			<tr>
-				<td colspan=2><input type=submit /></td>
-			</tr>
+
+<!-- 		<table width="510" cellpadding="2" cellspacing="1" border="1">
+				<tr valign="top">
+					<td width="510">
+						<p>MacBook </p>
+					</td>
+					<td width="100">
+						<p>Price</p>
+					</td>
+					<td width="100">
+						<p>Button</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<td width="510">
+						<p>BAD </p>
+					</td>
+					<td width="100">
+						<p>Price</p>
+					</td>
+					<td width="100">
+						<p>Button</p>
+					</td>
+				</tr>
 		</table>
-	</form>
+ -->
+
+
+		<table width="510" cellpadding="2" cellspacing="1" border="1">
+				<% 
+					while (result.next()){
+						
+				%>
+					<tr valign="top" align="center">
+						<td width="310">
+							<p><%=result.getString("name") %> </p>
+						</td>
+						<td width="100">
+							<p><%=result.getString("price")%> $</p>
+						</td>
+						<td width="100">
+							<button type="button" style="padding: 14px 28px;">Add</button>
+						</td>
+					</tr>
+				<%	
+					}
+				%>
+		</table>
 
 
 <BR><BR>
