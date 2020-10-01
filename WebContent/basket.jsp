@@ -67,9 +67,23 @@
 <form method="post" action="login.jsp">
 	<table>
 		<tr>
-			<td>Voucher:</td>
+			<td><label>Voucher:</label></td>
 			<td><input type="text" name="username" size=40 /></td>
-			<td colspan=2><input type=submit value="redeem" /></td>
+		</tr>
+		<tr>
+			<td><label>Country:</label></td>
+			 <td>
+			 <select id="country" name=country>
+				    <option value="USA">USA</option>
+				    <option value="Ecuador">Ecuador</option>
+				    <option value="Zimbabwe">Zimbabwe</option>
+				    <option value="Puerto Rico">Puerto Rico</option>
+				    <option value="El Salvador">El Salvador</option>
+			  </select>
+			  <td>
+		</tr>
+		<tr>
+			<td colspan=2><input type=submit value="update price" /></td>
 		</tr>
 	</table>
 </form>
@@ -81,17 +95,11 @@
 						
 				%>
 					<tr valign="top" align="center">
-						<td width="310">
+						<td width="410">
 							<p><%=productsArray.get(i).getName()%> </p>
 						</td>
 						<td width="100">
 							<p><%=productsArray.get(i).getPrice()%> $</p>
-						</td>
-						<td width="100">				
-							<form action="./products.jsp" method="get">
-								<input type="hidden" name="productId" value=<%=productsArray.get(i).getId()%> />
-								<button type="submit" style="padding: 14px 28px;">Add</button>
-							</form>
 						</td>
 					</tr>	
 				<%	
