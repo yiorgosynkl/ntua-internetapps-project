@@ -27,5 +27,16 @@ public class Catalog{
 			ids.add(pr.getId());
 		}
 	}
+	
+	public Integer totalPrice(Boolean discount) {
+		Integer total = new Integer(0);
+		for (int i=0; i< products.size(); i++) {
+			total = total + products.get(i).getPrice();
+		}
+		if (discount) {
+			total = total - 20;
+		}
+		return total;
+	}
 }
 	

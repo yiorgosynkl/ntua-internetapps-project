@@ -58,11 +58,22 @@
 				Catalog basketCatalog = (Catalog) session.getAttribute("SessionBasketCatalog");			
 				if (basketCatalog == null){
 					basketCatalog = new Catalog();
-					session.setAttribute("SessionBasketCatalog", basketCatalog);				}
+					session.setAttribute("SessionBasketCatalog", basketCatalog);
+				}
 			%>
 
 <center><h3>Basket</h3></center>
-
+<p>Total Price = <%=basketCatalog.totalPrice(false) %> $</p>
+<form method="post" action="login.jsp">
+	<table>
+		<tr>
+			<td>Voucher:</td>
+			<td><input type="text" name="username" size=40 /></td>
+			<td colspan=2><input type=submit value="redeem" /></td>
+		</tr>
+	</table>
+</form>
+<BR>
 			<table width="510" cellpadding="2" cellspacing="1" border="1">
 				<% 
 					ArrayList<Product> productsArray = basketCatalog.getProducts();
