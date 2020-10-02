@@ -1,11 +1,11 @@
-DROP DATABASE [IF EXISTS] ntua_internetapps_2020;
+DROP DATABASE IF EXISTS ntua_internetapps_2020;
 CREATE DATABASE ntua_internetapps_2020;
 USE ntua_internetapps_2020;
 
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS order_products;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS users;
 
 /* CREATE THE 4 TABLES */
 CREATE TABLE users (username VARCHAR(40) NOT NULL, name VARCHAR(40) NOT NULL, date DATE NOT NULL, password VARCHAR(40) NOT NULL, PRIMARY KEY(username) ) ENGINE = InnoDB;
