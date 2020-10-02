@@ -9,7 +9,6 @@
 	
 	// CLEAR SESSION
 	session.invalidate(); 
-	// System.out.println(String.valueOf(.getAttribute( "SessionUsername"));
 %>
 
 <html>

@@ -70,7 +70,9 @@
 				Integer countryId = rqCountryId == null ? 0 : Integer.parseInt(rqCountryId);
 				
 				Integer totalPrice = basketCatalog.totalPrice(voucherDiscount, countryId);
-				
+				basketCatalog.setPrice(totalPrice);
+				session.setAttribute("SessionBasketCatalog", basketCatalog);
+
 			%>
 
 <center><h3>Basket</h3></center>

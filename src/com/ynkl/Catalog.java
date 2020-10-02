@@ -7,10 +7,12 @@ import java.util.Set;
 public class Catalog{
 	private ArrayList<Product> products;
 	private Set<String> ids;
+	private Integer price;
 	
 	public Catalog() {
 		products = new ArrayList<Product>();
 		ids = new HashSet<String>();
+		price = totalPrice(false, 0);
 	}
 	
 	public ArrayList<Product> getProducts(){
@@ -19,6 +21,14 @@ public class Catalog{
 	
 	public Set<String> getIds(){
 		return ids;
+	}
+	
+	public Integer getPrice() {
+		return price;
+	}
+	
+	public void setPrice(Integer price) {
+		this.price = price;
 	}
 	
 	public void addProduct(Product pr) {
