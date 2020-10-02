@@ -28,15 +28,17 @@ public class Catalog{
 		}
 	}
 	
-	public Integer totalPrice(Boolean discount) {
+	public Integer totalPrice(Boolean discount, Integer countryId) {
 		Integer total = new Integer(0);
+		Integer[] tax = {1,2,3,4,5};
+		
 		for (int i=0; i< products.size(); i++) {
 			total = total + products.get(i).getPrice();
 		}
 		if (discount) {
 			total = total - 20;
 		}
-		return total;
+		return total + total * tax[countryId];
 	}
 }
 	

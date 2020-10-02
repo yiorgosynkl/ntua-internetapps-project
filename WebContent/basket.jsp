@@ -60,25 +60,28 @@
 					basketCatalog = new Catalog();
 					session.setAttribute("SessionBasketCatalog", basketCatalog);
 				}
+				
+				String rqCountryId = request.getParameter("countryId");	
+				Integer countryId = rqCountryId == null ? 0 : Integer.parseInt(rqCountryId);
 			%>
 
 <center><h3>Basket</h3></center>
-<p>Total Price = <%=basketCatalog.totalPrice(false) %> $</p>
-<form method="post" action="login.jsp">
+<p>Total Price = <%=basketCatalog.totalPrice(false, countryId) %> $</p>
+<form method="get" action="basket.jsp">
 	<table>
 		<tr>
 			<td><label>Voucher:</label></td>
-			<td><input type="text" name="username" size=40 /></td>
+			<td><input type="text" name="voucher" size=40 /></td>
 		</tr>
 		<tr>
 			<td><label>Country:</label></td>
 			 <td>
-			 <select id="country" name=country>
-				    <option value="USA">USA</option>
-				    <option value="Ecuador">Ecuador</option>
-				    <option value="Zimbabwe">Zimbabwe</option>
-				    <option value="Puerto Rico">Puerto Rico</option>
-				    <option value="El Salvador">El Salvador</option>
+			 <select id="country" name="countryId">
+				    <option value=0>USA</option>
+				    <option value=1>Ecuador</option>
+				    <option value=2>Zimbabwe</option>
+				    <option value=3>Puerto Rico</option>
+				    <option value=4>El Salvador</option>
 			  </select>
 			  <td>
 		</tr>
