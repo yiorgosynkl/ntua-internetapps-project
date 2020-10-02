@@ -55,56 +55,74 @@
 				<tr valign="top">
 					<td width="510">
 <!------------------------ Content zone, add your content below ---------------------------->
-<center><h3>Order</h3></center>
+<center><h3>Order Page</h3></center>
 			<%
 				Catalog basketCatalog = (Catalog) session.getAttribute("SessionBasketCatalog");			
-				if (basketCatalog == null){
+				if (basketCatalog == null || basketCatalog.getProducts().size() == 0){
 					basketCatalog = new Catalog();
 					session.setAttribute("SessionBasketCatalog", basketCatalog);
 					pageState = "ORDER_EMPTY";
 				}
 				
-				String rqVoucher = request.getParameter("voucher");
-				String voucherText = rqVoucher == null ? "" : rqVoucher;
-				Boolean voucherDiscount =  voucherText.equals("studentdiscount");
-				
-				String rqCountryId = request.getParameter("countryId");	
-				Integer countryId = rqCountryId == null ? 0 : Integer.parseInt(rqCountryId);
-				
-				Integer totalPrice = basketCatalog.totalPrice(voucherDiscount, countryId);
-				
-				Class.forName("com.mysql.jdbc.Driver").newInstance();
-				connection = DriverManager.getConnection(connectionURL, "root", "");
-				statement = connection.createStatement();
-				String insertSql = "INSERT INTO orders (username, price) VALUES ('" + username + "', " + totalPrice + ");";
-				int resultInt = statement.executeUpdate(insertSql);
-				
-				System.out.println("Result of insert" + resultInt);
-				if (resultInt == 1){
-					String searchSql = "SELECT max(id) FROM orders WHERE username='" + username +"';";
-					ResultSet resultSet = statement.executeQuery(searchSql);
+
+				if (pageState == "ORDER_START"){
 					
-					String order_id = "0";
-					if (resultSet != null && resultSet.next()){
-						order_id = resultSet.getString("id");
-					}
-					System.out.println("Order id:" + order_id);
+					String rqVoucher = request.getParameter("voucher");
+					String voucherText = rqVoucher == null ? "" : rqVoucher;
+					Boolean voucherDiscount =  voucherText.equals("studentdiscount");
 					
-					Set<String> productsIds = basketCatalog.getIds();
-					for(String prod_id : productsIds){
-						insertSql = "INSERT INTO order_products (" + order_id + ", " + prod_id + ") VALUES (1, 2);";
-						resultInt = statement.executeUpdate(insertSql);
-						System.out.println(prod_id);
-/* 						if (resultInt == 1){
-							
-						} */
+					String rqCountryId = request.getParameter("countryId");	
+					Integer countryId = rqCountryId == null ? 0 : Integer.parseInt(rqCountryId);
+					
+					Integer totalPrice = basketCatalog.totalPrice(voucherDiscount, countryId);
+					
+					
+					Class.forName("com.mysql.jdbc.Driver").newInstance();
+					connection = DriverManager.getConnection(connectionURL, "root", "");
+					statement = connection.createStatement();
+					String insertSql = "INSERT INTO orders (username, price) VALUES ('" + username + "', " + totalPrice + ");";
+					int resultInt = statement.executeUpdate(insertSql);
+										
+					System.out.println("Result of insert " + resultInt);
+					if (resultInt == 1){
+						String searchSql = "SELECT max(id) FROM orders WHERE username='" + username +"';";
+						ResultSet resultSet = statement.executeQuery(searchSql);
 						
+						String order_id = "0";
+						if (resultSet != null && resultSet.next()){
+							order_id = resultSet.getString("max(id)");
+						}
+						if (order_id != "0"){
+	
+							System.out.println("Order id:" + order_id);
+							
+							Set<String> productsIds = basketCatalog.getIds();
+							for(String prod_id : productsIds){
+								System.out.println(prod_id);
+								insertSql = "INSERT INTO order_products (order_id, prod_id) VALUES (" + order_id + ", " + prod_id + ");";
+								resultInt = statement.executeUpdate(insertSql);
+								System.out.println(prod_id);
+		  						if (resultInt != 1){
+		  							pageState = "ORDER_FAIL";
+		  							break;
+		  						}
+							}
+						}
+						else{
+							pageState = "ORDER_FAIL";
+						}
+					}
+					else{
+						pageState = "ORDER_FAIL";
+					}
+					
+					if (pageState == "ORDER_START"){
+						pageState = "ORDER_SUCCESS";
+						basketCatalog = new Catalog();
+						session.setAttribute("SessionBasketCatalog", basketCatalog);
 					}
 				}
-				pageState = "ORDER_SUCCESS";
 			%>
-
-
 
 			<%			
 				if (pageState == "ORDER_SUCCESS"){
@@ -114,8 +132,12 @@
 				}else if (pageState == "ORDER_FAIL"){
 			%>
 					<p>Your order failed :(</p>
-			<% 
-				}	
+			<%
+				}else if (pageState == "ORDER_EMPTY"){
+			%>
+					<p>Your basket is empty :|</p>
+			<%
+				}
 			%>
 
 <BR><BR>
