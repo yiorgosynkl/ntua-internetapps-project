@@ -34,5 +34,9 @@ public class Product {
 		setPrice(price);
 		setName(name);
 	}
+	
+	public static String printPrice(Integer myprice) {
+		return String.valueOf((myprice / 100.0));
+	}
 }
 

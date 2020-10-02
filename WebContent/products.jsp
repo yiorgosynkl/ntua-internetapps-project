@@ -86,7 +86,7 @@
 							<p><%=productsArray.get(i).getName()%> </p>
 						</td>
 						<td width="100">
-							<p><%=productsArray.get(i).getPrice()%> $</p>
+							<p><%=Product.printPrice(productsArray.get(i).getPrice()) %> $</p>
 						</td>
 						<td width="100">				
 							<form action="./products.jsp" method="get">

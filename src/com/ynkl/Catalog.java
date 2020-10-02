@@ -30,15 +30,16 @@ public class Catalog{
 	
 	public Integer totalPrice(Boolean discount, Integer countryId) {
 		Integer total = new Integer(0);
-		Integer[] tax = {1,2,3,4,5};
+		float[] tax = {1.10f, 1.15f, 1.17f, 1.21f, 1.23f}; // float taxes 
 		
 		for (int i=0; i< products.size(); i++) {
 			total = total + products.get(i).getPrice();
 		}
+		
 		if (discount) {
-			total = total - 20;
+			total = (Integer) Math.round(total * 0.8f);
 		}
-		return total + total * tax[countryId];
+		return (Integer) Math.round(total * tax[countryId]);
 	}
 }
 	

@@ -61,12 +61,20 @@
 					session.setAttribute("SessionBasketCatalog", basketCatalog);
 				}
 				
+				String rqVoucher = request.getParameter("voucher");
+				Boolean voucherDiscount = rqVoucher == null ? false : rqVoucher.equals("studentdiscount");
+				String priceTextColor = voucherDiscount ? "red" : "black";
+				System.out.println(priceTextColor);
+				
 				String rqCountryId = request.getParameter("countryId");	
 				Integer countryId = rqCountryId == null ? 0 : Integer.parseInt(rqCountryId);
+				
+				Integer totalPrice = basketCatalog.totalPrice(voucherDiscount, countryId);
+				
 			%>
 
 <center><h3>Basket</h3></center>
-<p>Total Price = <%=basketCatalog.totalPrice(false, countryId) %> $</p>
+<p style="color:<%= priceTextColor %>">Total Price = <%= Product.printPrice( totalPrice ) %> $</p>
 <form method="get" action="basket.jsp">
 	<table>
 		<tr>
@@ -102,7 +110,7 @@
 							<p><%=productsArray.get(i).getName()%> </p>
 						</td>
 						<td width="100">
-							<p><%=productsArray.get(i).getPrice()%> $</p>
+							<p><%= Product.printPrice(productsArray.get(i).getPrice()) %> $</p>
 						</td>
 					</tr>	
 				<%	
