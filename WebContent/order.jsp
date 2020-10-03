@@ -18,6 +18,12 @@
 	<link rel=stylesheet type="text/css" href="style.css">
 </head>
 
+<script>
+function alertFunction() {
+  alert("You have to Login first!");
+}
+</script>
+
 <%
 	
 	String username = String.valueOf(session.getAttribute("SessionUsername"));	
@@ -147,7 +153,10 @@
 			<%	} else if (pageState == "ORDER_EMPTY"){ %>
 					<p>Your basket is empty :|</p>
 			<%	} else if (pageState == "ORDER_FAIL_NO_USER"){ %>
-					<p>You have to <a href="./login.jsp">login</a> first </p>
+				<script type="text/javascript">
+	    			alert("You have to login first");
+				</script> 
+					<p>Got to the <a href="./login.jsp">login</a> page </p>
 			<%	} %>
 
 <BR><BR>
