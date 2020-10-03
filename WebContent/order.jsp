@@ -17,15 +17,22 @@
 </head>
 
 <%
-	String username = String.valueOf(session.getAttribute("SessionUsername"));
-	Catalog basketCatalog = (Catalog) session.getAttribute("SessionBasketCatalog");			
-	if (basketCatalog == null || basketCatalog.getProducts().size() == 0){
-		basketCatalog = new Catalog();
-		session.setAttribute("SessionBasketCatalog", basketCatalog);
-		pageState = "ORDER_EMPTY";
+	
+	String username = String.valueOf(session.getAttribute("SessionUsername"));	
+	if (username.equals("null")){
+		pageState = "ORDER_FAIL_NO_USER";	
+		System.out.println("HERE I GO");
+	}
+
+	Catalog basketCatalog = (Catalog) session.getAttribute("SessionBasketCatalog");	
+	if (pageState == "ORDER_START"){
+		if (basketCatalog == null || basketCatalog.getProducts().size() == 0){
+			basketCatalog = new Catalog();
+			session.setAttribute("SessionBasketCatalog", basketCatalog);
+			pageState = "ORDER_EMPTY";
+		}	
 	}
 	
-
 	if (pageState == "ORDER_START"){
 		Integer totalPrice = basketCatalog.getPrice();
 		
@@ -109,7 +116,9 @@
 			<table width="510" cellpadding="5" cellspacing="5" border="0">
 				<tr valign="top">
 					<td width="510" style="text-align:right">
-						<p>Welcome, <%=username%> </p>
+						<% if (pageState != "ORDER_FAIL_NO_USER"){%>
+							<p>Welcome, <%=username%> </p>
+						<%	} %>
 					</td>
 				</tr>
 				<tr valign="top">
@@ -123,6 +132,8 @@
 					<p>Your order failed :(</p>
 			<%	} else if (pageState == "ORDER_EMPTY"){ %>
 					<p>Your basket is empty :|</p>
+			<%	} else if (pageState == "ORDER_FAIL_NO_USER"){ %>
+					<p>You have to <a href="./login.jsp">login</a> first </p>
 			<%	} %>
 
 <BR><BR>
