@@ -4,6 +4,8 @@
 <%@ page import="java.sql.*"%>
 <%@ page import="com.ynkl.*"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.io.*"%>
+
 <%
 	String connectionURL = "jdbc:mysql://localhost:3306/ntua_internetapps_2020";
 	Connection connection = null;
@@ -21,7 +23,6 @@
 	String username = String.valueOf(session.getAttribute("SessionUsername"));	
 	if (username.equals("null")){
 		pageState = "ORDER_FAIL_NO_USER";	
-		System.out.println("HERE I GO");
 	}
 
 	Catalog basketCatalog = (Catalog) session.getAttribute("SessionBasketCatalog");	
@@ -41,39 +42,52 @@
 		statement = connection.createStatement();
 		String insertSql = "INSERT INTO orders (username, price) VALUES ('" + username + "', " + totalPrice + ");";
 		int resultInt = statement.executeUpdate(insertSql);
-							
-		System.out.println("Result of insert " + resultInt);
+
+		String filePath = application.getRealPath("/users.txt");
+		System.out.println("Path of file: " + filePath);
+		FileWriter filewrt = new FileWriter(filePath,true);
+		BufferedWriter fileout = new BufferedWriter(filewrt);
+		fileout.write("--------------------------------"); fileout.newLine();		
+		fileout.write(username + " makes order that costs " + totalPrice + " pennies" ); fileout.newLine();		
+
 		if (resultInt == 1){
 			String searchSql = "SELECT max(id) FROM orders WHERE username='" + username +"';";
 			ResultSet resultSet = statement.executeQuery(searchSql);
-			
+
+
 			String order_id = "0";
 			if (resultSet != null && resultSet.next()){
 				order_id = resultSet.getString("max(id)");
 			}
 			if (order_id != "0"){
 
-				System.out.println("Order id:" + order_id);
+				//System.out.println("Order id:" + order_id);
+				fileout.write("The order has id " + order_id + " and contains the following products:" ); fileout.newLine();		
 				
 				Set<String> productsIds = basketCatalog.getIds();
 				for(String prod_id : productsIds){
 					System.out.println(prod_id);
 					insertSql = "INSERT INTO order_products (order_id, prod_id) VALUES (" + order_id + ", " + prod_id + ");";
 					resultInt = statement.executeUpdate(insertSql);
-					System.out.println(prod_id);
- 						if (resultInt != 1){
- 							pageState = "ORDER_FAIL";
- 							break;
- 						}
+					//System.out.println(prod_id);
+					fileout.write(prod_id); fileout.newLine();		
+					if (resultInt != 1){
+						pageState = "ORDER_FAIL";
+						break;
+					}
 				}
 			}
 			else{
 				pageState = "ORDER_FAIL";
 			}
+
 		}
 		else{
 			pageState = "ORDER_FAIL";
 		}
+		
+		fileout.write("--------------------------------"); fileout.newLine();		
+		fileout.close();		
 		
 		if (pageState == "ORDER_START"){
 			pageState = "ORDER_SUCCESS";
